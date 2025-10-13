@@ -38,15 +38,15 @@ resource "aws_instance" "web_server" {
 
   provisioner "remote-exec" {
     inline = [
-  "sudo dnf update -y",
-  "sudo dnf install nginx -y",
+  "sudo apt update -y",
+  "sudo apt install nginx -y",
   "sudo systemctl start nginx",
   "sudo systemctl enable nginx"
 ]
 
     connection {
       type        = "ssh"
-      user        = "ec2-user"
+      user        = "ubuntu"
       private_key = file(var.private_key_path)
       host        = self.public_ip
     }
@@ -58,7 +58,7 @@ resource "aws_instance" "web_server" {
 
     connection {
       type        = "ssh"
-      user        = "ec2-user"
+      user        = "ubuntu"
       private_key = file(var.private_key_path)
       host        = self.public_ip
     }
@@ -72,7 +72,7 @@ resource "aws_instance" "web_server" {
 
     connection {
       type        = "ssh"
-      user        = "ec2-user"
+      user        = "ubuntu"
       private_key = file(var.private_key_path)
       host        = self.public_ip
     }
