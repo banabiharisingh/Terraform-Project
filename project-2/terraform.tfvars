@@ -1,3 +1,3 @@
-ami_id = "ami-0f9708d1cd2cfee41"
-key_name = "aws_key.pem"
-private_key_path = "/Terraform-Project/Terraform-Project/project-2/aws_key.pem"
+ami_id = "ami-0f58b397bc5c1f2e8"
+key_name = "aws_key"
+private_key_path = "./aws_key.pem"

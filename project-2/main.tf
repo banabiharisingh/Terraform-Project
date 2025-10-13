@@ -2,18 +2,47 @@ provider "aws" {
   region = "ap-south-1" # Mumbai region (closest to Bangalore)
 }
 
+resource "aws_security_group" "web_sg" {
+  name        = "web_sg"
+  description = "Allow SSH and HTTP access"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allow SSH from anywhere (you can restrict to your IP)
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Allow HTTP from anywhere
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
 resource "aws_instance" "web_server" {
   ami           = var.ami_id # Amazon Linux 2 AMI (update if needed)
   instance_type = "t2.micro"
   key_name      = var.key_name
 
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+
   provisioner "remote-exec" {
     inline = [
-      "sudo yum update -y",
-      "sudo amazon-linux-extras install nginx1 -y",
-      "sudo systemctl start nginx",
-      "sudo systemctl enable nginx"
-    ]
+  "sudo dnf update -y",
+  "sudo dnf install nginx -y",
+  "sudo systemctl start nginx",
+  "sudo systemctl enable nginx"
+]
 
     connection {
       type        = "ssh"
